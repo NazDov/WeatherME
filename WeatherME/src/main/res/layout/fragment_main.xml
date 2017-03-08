@@ -1,0 +1,55 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.WeatherActivity$WeatherFragment">
+
+    <ProgressBar
+        android:id="@+id/progressBar1"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true" />
+
+    <LinearLayout
+        android:id="@+id/selectionTabs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/day5btn"
+            android:layout_width="0dp"
+            android:layout_weight=".33"
+            android:layout_height="match_parent"
+            android:background="@color/blue"
+            android:text="5 днів"
+            />
+        <Button
+            android:id="@+id/day10btn"
+            android:layout_width="0dp"
+            android:layout_weight=".33"
+            android:layout_height="match_parent"
+            android:background="@color/blue"
+            android:text="10 днів"
+            />
+        <Button
+            android:id="@+id/day15btn"
+            android:layout_width="0dp"
+            android:layout_weight=".33"
+            android:layout_height="match_parent"
+            android:background="@color/blue"
+            android:text="15 днів"
+            />
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listview_forecast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarStyle="insideOverlay"
+        android:layout_below="@id/selectionTabs"
+        >
+    </ListView>
+
+</RelativeLayout>
