@@ -7,9 +7,9 @@ WeatherME
 
 Try out my sample application on .
 
-<a href="http://s000.tinyupload.com/download.php?file_id=22153366913794932319&t=2215336691379493231961344">
-  <img alt="BetterPickers Samples on Google Play"
-         src="http://diylogodesigns.com/blog/wp-content/uploads/2016/06/blue-color-free-Download-Button.png" width="140" />
+<a href="http://s000.tinyupload.com/download.php?file_id=22153366913794932319&t=2215336691379493231938084">
+  <img alt="download"
+         src="http://diylogodesigns.com/blog/wp-content/uploads/2016/06/blue-color-free-Download-Button.png" width="250" />
 </a>
 
 
