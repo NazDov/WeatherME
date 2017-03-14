@@ -1,13 +1,13 @@
 [![API](https://img.shields.io/badge/API-10%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=10)
 
-<img src="https://raw.githubusercontent.com/NazDov/WeatherME/master/samples/screenshot.png" width="400" >
+<img src="https://raw.githubusercontent.com/NazDov/WeatherME/master/samples/screenshot.png" width="300" >
 
 WeatherME
 =========================
 
 Try out my sample application on .
 
-<a href="http://s000.tinyupload.com/download.php?file_id=22153366913794932319&t=2215336691379493231906967">
+<a href="http://s000.tinyupload.com/download.php?file_id=22153366913794932319&t=2215336691379493231961344">
   <img alt="BetterPickers Samples on Google Play"
          src="http://diylogodesigns.com/blog/wp-content/uploads/2016/06/blue-color-free-Download-Button.png" width="140" />
 </a>
