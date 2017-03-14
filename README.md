@@ -2,7 +2,7 @@
 [![Current Version](1.0-alpha)]()
 
 
-<img src="https://raw.githubusercontent.com/NazDov/WeatherME/samples/screenshot.png" >
+<img src="https://raw.githubusercontent.com/NazDov/WeatherME/master/samples/screenshot.png" >
 
 WeatherME
 =========================
