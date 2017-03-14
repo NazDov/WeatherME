@@ -16,6 +16,7 @@ bin/
 out/
 gen/
 
+
 # Libraries used by the app
 # Can explicitly add if we want, but shouldn't do so blindly.  Licenses, bloat, etc.
 /libs
@@ -41,3 +42,5 @@ project.properties
 ##Gradle-based build
 .gradle
 build/
+captures/
+gradle/
