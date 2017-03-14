@@ -1,6 +1,4 @@
 [![API](https://img.shields.io/badge/API-10%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=10)
-[![current version](https://badge.fury.io/js/1.0.svg)](https://badge.fury.io/js/1.0)
-
 
 <img src="https://raw.githubusercontent.com/NazDov/WeatherME/master/samples/screenshot.png" width="400" >
 
