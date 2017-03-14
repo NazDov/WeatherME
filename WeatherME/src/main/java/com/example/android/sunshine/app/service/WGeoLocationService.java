@@ -17,10 +17,10 @@ import java.net.UnknownHostException;
 /**
  * Created by nazardovhuy on 05.11.2016.
  */
-public class GeoLocationService {
+public class WGeoLocationService {
 
 
-    public GeoLocationService() {
+    public WGeoLocationService() {
 
     }
 

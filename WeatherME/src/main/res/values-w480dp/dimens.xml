@@ -1,2 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <dimen name="loc_descr_image_width">85dp</dimen>
+    <dimen name="loc_descr_image_height">85dp</dimen>
+    <dimen name="loc_desc_image_padding">5dp</dimen>
+
+</resources>

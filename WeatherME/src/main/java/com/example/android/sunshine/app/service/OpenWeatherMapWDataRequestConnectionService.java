@@ -1,12 +1,13 @@
 package com.example.android.sunshine.app.service;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.android.sunshine.app.WeatherServerProperty;
-import com.example.android.sunshine.app.utility.ApplicationContext;
+import com.example.android.sunshine.app.utility.WApplicationContext;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,41 +20,52 @@ import java.net.URL;
 /**
  * Created by nazar.dovhyi on 05.11.2016.
  */
-public class WeatherDataService {
-    private static final String LOG_TAG = WeatherDataService.class.getSimpleName();
+public class OpenWeatherMapWDataRequestConnectionService implements WDataRequestConnectionService {
+    private static final String LOG_TAG = OpenWeatherMapWDataRequestConnectionService.class.getSimpleName();
     private WeatherServerProperty weatherServerProperty;
     private HttpURLConnection urlConnection;
-    private WeatherDataServiceByDateUrl weatherDataServiceUrl;
+    private WeatherDataServiceURLBuilder weatherDataServiceUrl;
 
-    public WeatherDataService(Context context) {
+    public OpenWeatherMapWDataRequestConnectionService(Context context) {
         weatherServerProperty = new WeatherServerProperty(context);
     }
 
 
-    public WeatherDataService(Context context, WeatherDataServiceByDateUrl weatherDataServiceUrl) {
+    public OpenWeatherMapWDataRequestConnectionService(Context context, WeatherDataServiceURLBuilder weatherDataServiceUrl) {
         this(context);
         this.weatherDataServiceUrl = weatherDataServiceUrl;
 
     }
 
 
+    @Override
     public String httpGetWeatherDataJSON(String param) {
+
+        SharedPreferences settings = WApplicationContext.getSettings();
+        String searchParam = settings.getString("search_query", null);
+        if (searchParam != null) {
+            param = searchParam;
+        }
+
         String resultWeatherData;
         InputStream responseInputStream = null;
         try {
             responseInputStream = getServerWeatherInfoByParam(param);
             resultWeatherData = parseResultWeatherData(responseInputStream);
-            ApplicationContext.setResultWeatherData(resultWeatherData);
-            return ApplicationContext.RESPONSE_OK;
+            if (resultWeatherData.trim().length() == 0) {
+                return WApplicationContext.DATA_NOT_FOUND;
+            }
+            WApplicationContext.setResultWeatherData(resultWeatherData);
+            return WApplicationContext.RESPONSE_OK;
         } catch (MalformedURLException e) {
-            Log.e(LOG_TAG, ApplicationContext.WRONG_CONNECTION_URL);
-            return ApplicationContext.WRONG_CONNECTION_URL;
+            Log.e(LOG_TAG, WApplicationContext.WRONG_CONNECTION_URL);
+            return WApplicationContext.WRONG_CONNECTION_URL;
         } catch (IOException e) {
-            Log.e(LOG_TAG, ApplicationContext.DATA_PARSE_ERROR);
-            return ApplicationContext.DATA_PARSE_ERROR;
+            Log.e(LOG_TAG, WApplicationContext.DATA_PARSE_ERROR);
+            return WApplicationContext.DATA_PARSE_ERROR;
         } catch (ServerWeatherNoResponseException e) {
-            Log.e(LOG_TAG, ApplicationContext.NO_SERVER_RESPONSE);
-            return ApplicationContext.NO_SERVER_RESPONSE;
+            Log.e(LOG_TAG, WApplicationContext.NO_SERVER_RESPONSE);
+            return WApplicationContext.NO_SERVER_RESPONSE;
         } finally {
             closeConnections(responseInputStream);
         }
@@ -88,14 +100,15 @@ public class WeatherDataService {
         InputStream responseInputStream;
         URL url;
         try {
-            if(weatherDataServiceUrl ==null){
+            if (weatherDataServiceUrl == null) {
                 url = new URL(buildWeatherDataServiceUrl(param).toString());
                 Log.i(LOG_TAG, url.toString());
-            }else{
+            } else {
                 url = new URL(weatherDataServiceUrl.buildWeatherDataServiceUrl(param).toString());
             }
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
+            urlConnection.setConnectTimeout(30000);
             urlConnection.connect();
             responseInputStream = urlConnection.getInputStream();
             return responseInputStream;

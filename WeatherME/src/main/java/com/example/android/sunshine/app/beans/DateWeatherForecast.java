@@ -7,6 +7,8 @@ import java.io.Serializable;
  */
 public class DateWeatherForecast implements Serializable {
 
+    private String city;
+    private String country;
     private String date;
     private String temp;
     private String maxTemp;
@@ -127,5 +129,21 @@ public class DateWeatherForecast implements Serializable {
 
     public String getWeatherIconId() {
         return weatherIconId;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 }

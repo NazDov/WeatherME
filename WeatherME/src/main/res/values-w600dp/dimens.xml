@@ -2,4 +2,7 @@
 <resources>
 
     <dimen name="wdescr_width">200dp</dimen>
+    <dimen name="loc_descr_image_width">150dp</dimen>
+    <dimen name="loc_descr_image_height">150dp</dimen>
+    <dimen name="loc_desc_image_padding">10dp</dimen>
 </resources>

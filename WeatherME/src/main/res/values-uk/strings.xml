@@ -3,6 +3,7 @@
 
     <string name="dialog_app_title_exit">Вихід</string>
     <string name="dialog_no_internet_message">Для викортстання цієї аплікації потрібен інтернет доступ</string>
+    <string name="dialog_app_title_err_exit">Помилка</string>
 
 
     <!-- description codes and messages-->
@@ -79,6 +80,22 @@
     <string name="c960">шторм</string>
     <string name="c961">сильний шторм</string>
     <string name="c962">ураган</string>
-
-
+    <string name="day5btn_text">5 днів</string>
+    <string name="day10btn_text">10 днів</string>
+    <string name="day15btn_text">15 днів</string>
+    <string name="ok_btn">ОК</string>
+    <string name="cnxl_btn">Відмінити</string>
+    <string name="no_weather_data_found_search_by_city">Пошук не дав результату. Вкажіть назву міста латиною</string>
+    <string name="city_name_title">Місто:</string>
+    <string name="country_name_title">Країна:</string>
+    <string name="langChangeText">Змінити мову</string>
+    <string name="settings_activity_name">Налаштування</string>
+    <string name="notice_title">Повідомлення</string>
+    <string name="loading_text">Завантаження...</string>
+    <string-array name="langs">
+        <item>Англійська</item>
+        <item>Українська</item>
+    </string-array>
+    <string name="ukr_lang_id">Українська</string>
+    <string name="en_lang_id">Англійська</string>
 </resources>

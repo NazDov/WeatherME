@@ -2,10 +2,9 @@ package com.example.android.sunshine.app.utility.parser.impl;
 
 import android.content.Context;
 
-import static com.example.android.sunshine.app.utility.ApplicationContext.*;
+import static com.example.android.sunshine.app.utility.WApplicationContext.*;
 
 import com.example.android.sunshine.app.beans.DateWeatherForecast;
-import com.example.android.sunshine.app.utility.ApplicationContext;
 import com.example.android.sunshine.app.utility.parser.AbstractWeatherJsonParser;
 import org.json.JSONArray;
 import org.json.JSONException;

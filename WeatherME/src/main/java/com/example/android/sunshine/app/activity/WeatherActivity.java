@@ -1,7 +1,8 @@
 package com.example.android.sunshine.app.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
@@ -19,15 +20,20 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.support.v7.widget.*;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.sunshine.app.R;
-import com.example.android.sunshine.app.asynctask.WeatherLocationRequestAsyncTask;
+import com.example.android.sunshine.app.asynctask.WeatherDataRequestAsyncTask;
 import com.example.android.sunshine.app.beans.DateWeatherForecast;
-import com.example.android.sunshine.app.service.GeoLocationService;
-import com.example.android.sunshine.app.service.WeatherDataServiceByDateUrl;
-import com.example.android.sunshine.app.utility.ApplicationContext;
-import com.example.android.sunshine.app.service.WeatherDataService;
+import com.example.android.sunshine.app.service.WDataRequestConnectionService;
+import com.example.android.sunshine.app.service.WGeoLocationService;
+import com.example.android.sunshine.app.service.OpenWeatherMapWeatherDataServiceURLBuilder;
+import com.example.android.sunshine.app.service.WSearchGeoLocationService;
+import com.example.android.sunshine.app.service.WeatherDataServiceURLBuilder;
+import com.example.android.sunshine.app.utility.WApplicationContext;
+import com.example.android.sunshine.app.service.OpenWeatherMapWDataRequestConnectionService;
 import com.example.android.sunshine.app.utility.WeatherJsonUtility;
 import com.example.android.sunshine.app.utility.parser.impl.DateWeatherForecastJsonParser;
 
@@ -47,7 +53,7 @@ public class WeatherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         WeatherFragment weatherFragment = new WeatherFragment();
-        ApplicationContext.setContext(this);
+        WApplicationContext.setContext(this);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, weatherFragment)
@@ -62,10 +68,13 @@ public class WeatherActivity extends AppCompatActivity {
     public static class WeatherFragment extends Fragment implements View.OnClickListener {
 
         private View rootView;
-        private ProgressBar spinner;
+        private TextView cityNameTextView;
+        private TextView countryNameTextView;
+        private SearchView searchView;
         private Button _5dayWeatherBtn;
         private Button _10dayWeatherButton;
         private Button __15dayWeatherButton;
+        private SharedPreferences settings;
 
         public WeatherFragment() {
         }
@@ -77,16 +86,53 @@ public class WeatherActivity extends AppCompatActivity {
             setHasOptionsMenu(true);
         }
 
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             init(inflater, container);
+            WApplicationContext.updateWAppLang();
             loadDateWeatherStats();
             return rootView;
         }
 
+        @Override
+        public void onResume() {
+            super.onResume();
+            WApplicationContext.updateWAppLang();
+        }
+
         private void init(LayoutInflater inflater, ViewGroup container) {
+            settings = WApplicationContext.getSettings();
+
             rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            searchView = (SearchView) rootView.findViewById(R.id.searchView);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    Toast.makeText(getActivity(), "search text " + query, Toast.LENGTH_LONG).show();
+                    if (query != null && query.trim().length() > 0) {
+                        if (isNetworkConnectionEstablished()) {
+                            settings.edit().putString("search_query", query).apply();
+                            requestWeatherDataBySearchParam(new OpenWeatherMapWDataRequestConnectionService(getActivity()),
+                                    new WSearchGeoLocationService(query));
+                        } else {
+                            showDialog(R.string.dialog_app_title_err_exit,
+                                    R.string.dialog_no_internet_message);
+                        }
+                    }
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
+            });
+
+            cityNameTextView = (TextView) rootView.findViewById(R.id.cityDescrNamText);
+            countryNameTextView = (TextView) rootView.findViewById(R.id.countryDescrNameText);
+
             View buttonView = rootView.findViewById(R.id.selectionTabs);
             _5dayWeatherBtn = (Button) buttonView.findViewById(R.id.day5btn);
             _10dayWeatherButton = (Button) buttonView.findViewById(R.id.day10btn);
@@ -94,37 +140,36 @@ public class WeatherActivity extends AppCompatActivity {
             _5dayWeatherBtn.setOnClickListener(this);
             _10dayWeatherButton.setOnClickListener(this);
             __15dayWeatherButton.setOnClickListener(this);
-            spinner = (ProgressBar) rootView.findViewById(R.id.progressBar1);
         }
 
         private void loadDateWeatherStats() {
             if (isNetworkConnectionEstablished()) {
-                loadDefaultDateWeatherForecastList();
+                requestWeatherData(new OpenWeatherMapWDataRequestConnectionService(getActivity()));
             } else {
-                showNoActiveNetDialogErr();
+                showDialog(R.string.dialog_app_title_err_exit,
+                        R.string.dialog_no_internet_message);
             }
         }
 
-        private void showNoActiveNetDialogErr() {
-            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-            dialogBuilder.setTitle(R.string.dialog_app_title_exit)
-                    .setMessage(R.string.dialog_no_internet_message)
-                    .setCancelable(false)
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.cancel();
-                            getActivity().finish();
-                        }
-                    });
-            dialogBuilder.create().show();
-        }
+        public final void showDialog(int titleId, int textMessageId) {
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.setContentView(R.layout.custom_dialog);
+            dialog.setCancelable(false);
+            dialog.setTitle(titleId);
+            TextView dialogTextView = (TextView) dialog.findViewById(R.id.customDialogText);
+            dialogTextView.setText(textMessageId);
+            Button okBtn = (Button) dialog.findViewById(R.id.customDialogOk);
+            Button cnxlBtn = (Button) dialog.findViewById(R.id.customDialogCancel);
+            cnxlBtn.setVisibility(View.INVISIBLE);
+            okBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                    getActivity().finish();
+                }
+            });
+            dialog.show();
 
-        private void loadDefaultDateWeatherForecastList() {
-            final GeoLocationService geoLocationService = new GeoLocationService();
-            final WeatherLocationRequestAsyncTask weatherLocationRequestAsyncTask =
-                    new WeatherLocationRequestAsyncTask(new WeatherDataService(getActivity()), WeatherFragment.this);
-            weatherLocationRequestAsyncTask.execute(geoLocationService);
         }
 
 
@@ -137,9 +182,9 @@ public class WeatherActivity extends AppCompatActivity {
         @Override
         public boolean onOptionsItemSelected(MenuItem item) {
             switch (item.getItemId()) {
-                case R.id.refresh_btn:
-                    if (isNetworkConnectionEstablished())
-                        loadDefaultDateWeatherForecastList();
+                case R.id.settings_menu_item:
+                    Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                    startActivity(intent);
                     return true;
 
             }
@@ -167,6 +212,8 @@ public class WeatherActivity extends AppCompatActivity {
             List<DateWeatherForecast> weatherData;
             try {
                 weatherData = WeatherJsonUtility.parse((String) response, new DateWeatherForecastJsonParser(getActivity()));
+                populateLocationInfo(weatherData);
+                weatherData.remove(0);
                 populateWeatherDataIntoListView(weatherData);
             } catch (JSONException | ParseException e) {
                 throw new RuntimeException(e);
@@ -175,32 +222,39 @@ public class WeatherActivity extends AppCompatActivity {
 
         }
 
+        private void populateLocationInfo(List<DateWeatherForecast> weatherData) {
+            DateWeatherForecast locationDateWeatherForecast = weatherData.get(0);
+            if (locationDateWeatherForecast != null) {
+                cityNameTextView.setText(locationDateWeatherForecast.getCity());
+                countryNameTextView.setText(locationDateWeatherForecast.getCountry());
+            }
+        }
+
         private void populateWeatherDataIntoListView(List<DateWeatherForecast> weatherData) {
             ListView listView = (ListView) getRootView().findViewById(R.id.listview_forecast);
             listView.setAdapter(getArrayAdapter(weatherData));
-            /**
-             * register onclick listener that will process click of a single list element
-             */
             registerOnclickListener(listView);
         }
 
         @NonNull
         private ArrayAdapter<DateWeatherForecast> getArrayAdapter(List<DateWeatherForecast> forecastData) {
-            return new WeatherArrayAdapter(ApplicationContext.getContext(), R.layout.listitem_dateweather, forecastData);
+            return new WeatherArrayAdapter(WApplicationContext.getContext(), R.layout.listitem_dateweather, forecastData);
         }
 
         private void registerOnclickListener(ListView listView) {
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    if (!isNetworkConnectionEstablished()) {
+                        showDialog(R.string.dialog_app_title_err_exit,
+                                R.string.dialog_no_internet_message);
+                    }
+
                     DateWeatherForecast selectedDateWeatherForecastElem = (DateWeatherForecast) parent.getItemAtPosition(position);
-                    Toast.makeText(ApplicationContext.getContext(), selectedDateWeatherForecastElem.getDate(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(WApplicationContext.getContext(), selectedDateWeatherForecastElem.getDate(), Toast.LENGTH_LONG).show();
                 }
             });
-        }
-
-        public ProgressBar getSpinner() {
-            return spinner;
         }
 
         public View getRootView() {
@@ -211,40 +265,63 @@ public class WeatherActivity extends AppCompatActivity {
         public void onClick(View v) {
 
             if (!isNetworkConnectionEstablished()) {
-                showNoActiveNetDialogErr();
+                showDialog(R.string.dialog_app_title_err_exit,
+                        R.string.dialog_no_internet_message);
                 return;
             }
-            WeatherDataServiceByDateUrl weatherDataServiceByDateUrl;
+            WeatherDataServiceURLBuilder weatherDataServiceURLBuilder;
             switch (v.getId()) {
 
                 case R.id.day5btn:
                     Toast.makeText(getActivity(), "5 days weather", Toast.LENGTH_LONG).show();
-                    weatherDataServiceByDateUrl = new WeatherDataServiceByDateUrl("5");
-                    loadDateSpecificDateWeatherForecastList(new WeatherDataService(getActivity(), weatherDataServiceByDateUrl));
+                    weatherDataServiceURLBuilder = new OpenWeatherMapWeatherDataServiceURLBuilder() {
+                        @Override
+                        protected String getWeatherForDays() {
+                            return WApplicationContext.W_5_DAYS;
+                        }
+                    };
+                    requestWeatherData(new OpenWeatherMapWDataRequestConnectionService(getActivity(), weatherDataServiceURLBuilder));
 
                     break;
 
                 case R.id.day10btn:
                     Toast.makeText(getActivity(), "10 days weather", Toast.LENGTH_LONG).show();
-                    weatherDataServiceByDateUrl = new WeatherDataServiceByDateUrl("10");
-                    loadDateSpecificDateWeatherForecastList(new WeatherDataService(getActivity(), weatherDataServiceByDateUrl));
+                    weatherDataServiceURLBuilder = new OpenWeatherMapWeatherDataServiceURLBuilder() {
+                        @Override
+                        protected String getWeatherForDays() {
+                            return WApplicationContext.W_10_DAYS;
+                        }
+                    };
+                    requestWeatherData(new OpenWeatherMapWDataRequestConnectionService(getActivity(), weatherDataServiceURLBuilder));
                     break;
 
                 case R.id.day15btn:
                     Toast.makeText(getActivity(), "15 days weather", Toast.LENGTH_LONG).show();
-                    weatherDataServiceByDateUrl = new WeatherDataServiceByDateUrl("15");
-                    loadDateSpecificDateWeatherForecastList(new WeatherDataService(getActivity(), weatherDataServiceByDateUrl));
+                    weatherDataServiceURLBuilder = new OpenWeatherMapWeatherDataServiceURLBuilder() {
+                        @Override
+                        protected String getWeatherForDays() {
+                            return WApplicationContext.W_15_DAYS;
+                        }
+                    };
+                    requestWeatherData(new OpenWeatherMapWDataRequestConnectionService(getActivity(), weatherDataServiceURLBuilder));
                     break;
             }
 
 
         }
 
-        private void loadDateSpecificDateWeatherForecastList(WeatherDataService weatherDataService) {
-            final GeoLocationService geoLocationService = new GeoLocationService();
-            final WeatherLocationRequestAsyncTask weatherLocationRequestAsyncTask =
-                    new WeatherLocationRequestAsyncTask(weatherDataService, WeatherFragment.this);
-            weatherLocationRequestAsyncTask.execute(geoLocationService);
+        private void requestWeatherData(final WDataRequestConnectionService WDataRequestConnectionService) {
+            WGeoLocationService WGeoLocationService = new WGeoLocationService();
+            WeatherDataRequestAsyncTask weatherDataRequestAsyncTask = new WeatherDataRequestAsyncTask(WDataRequestConnectionService, WeatherFragment.this);
+            weatherDataRequestAsyncTask.execute(WGeoLocationService);
         }
+
+        private void requestWeatherDataBySearchParam(final WDataRequestConnectionService wDataRequestConnectionService,
+                                                     final WGeoLocationService wGeoLocationService) {
+            WeatherDataRequestAsyncTask weatherDataRequestAsyncTask = new WeatherDataRequestAsyncTask(wDataRequestConnectionService, WeatherFragment.this);
+            weatherDataRequestAsyncTask.execute(wGeoLocationService);
+        }
+
+
     }
 }

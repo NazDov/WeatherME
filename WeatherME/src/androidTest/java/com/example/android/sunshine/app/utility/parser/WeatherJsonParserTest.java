@@ -1,6 +1,6 @@
 package com.example.android.sunshine.app.utility.parser;
 
-import com.example.android.sunshine.app.utility.ApplicationContext;
+import com.example.android.sunshine.app.utility.WApplicationContext;
 
 import junit.framework.TestCase;
 
@@ -48,7 +48,7 @@ public class WeatherJsonParserTest extends TestCase {
     @Override
     protected void setUp() throws Exception {
         JSONObject weatherJSOn = new JSONObject(WEATHER_TEST_JSON);
-        weatherListJson = dummyWeatherJsonParser.getParsedWeatherJsonArrayByAttr(weatherJSOn, ApplicationContext.WEATHER_LIST_ATTR).getJSONObject(0);
+        weatherListJson = dummyWeatherJsonParser.getParsedWeatherJsonArrayByAttr(weatherJSOn, WApplicationContext.WEATHER_LIST_ATTR).getJSONObject(0);
     }
 
     public void testGetParsedWeatherConditionCode() throws JSONException {

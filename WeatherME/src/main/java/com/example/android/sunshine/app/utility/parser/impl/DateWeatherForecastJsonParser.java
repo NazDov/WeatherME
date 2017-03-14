@@ -2,7 +2,7 @@ package com.example.android.sunshine.app.utility.parser.impl;
 
 import android.content.Context;
 
-import static com.example.android.sunshine.app.utility.ApplicationContext.*;
+import static com.example.android.sunshine.app.utility.WApplicationContext.*;
 
 import com.example.android.sunshine.app.beans.DateWeatherForecast;
 import com.example.android.sunshine.app.utility.parser.AbstractWeatherJsonParser;
@@ -29,6 +29,11 @@ public class DateWeatherForecastJsonParser extends AbstractWeatherJsonParser<Lis
     public List<DateWeatherForecast> parse(String weatherDataJson) throws JSONException, ParseException {
         List<DateWeatherForecast> dateWeatherForecasts = new ArrayList<>();
         JSONObject weatherJsonObject = new JSONObject(weatherDataJson);
+        DateWeatherForecast locationDescDateWeatherForecast = new DateWeatherForecast();
+        JSONObject cityJson = weatherJsonObject.getJSONObject("city");
+        locationDescDateWeatherForecast.setCity(cityJson.getString("name"));
+        locationDescDateWeatherForecast.setCountry(cityJson.getString("country"));
+        dateWeatherForecasts.add(locationDescDateWeatherForecast);
         JSONArray weatherJsonListArray = getParsedWeatherJsonArrayByAttr(weatherJsonObject, WEATHER_LIST_ATTR);
         for (int index = 0; index < weatherJsonListArray.length(); index++) {
             weatherJsonObject = weatherJsonListArray.getJSONObject(index);

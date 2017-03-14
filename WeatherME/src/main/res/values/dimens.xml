@@ -6,4 +6,8 @@
     <dimen name="forecast_data_margin">10dp</dimen>
     <dimen name="loading_page_text_size">45sp</dimen>
     <dimen name="wdescr_width">50dp</dimen>
+
+    <dimen name="loc_descr_image_width">120dp</dimen>
+    <dimen name="loc_descr_image_height">120dp</dimen>
+    <dimen name="loc_desc_image_padding">10dp</dimen>
 </resources>

@@ -4,52 +4,119 @@
     android:layout_height="match_parent"
     tools:context=".activity.WeatherActivity$WeatherFragment">
 
-    <ProgressBar
-        android:id="@+id/progressBar1"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:layout_centerHorizontal="true" />
 
+
+    <android.support.v7.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/searchView"
+        android:clickable="true"
+        />
+
+    <LinearLayout
+        android:id="@+id/locDescrLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/searchView"
+     >
+
+        <ImageView
+            android:layout_width="@dimen/loc_descr_image_width"
+            android:layout_height="@dimen/loc_descr_image_height"
+            android:padding="@dimen/loc_desc_image_padding"
+            android:src="@drawable/loader_pic"/>
+
+        <RelativeLayout
+            android:id="@+id/innerDescrLayout"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/innerCityDescrLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/city_name_title"/>
+
+                <TextView
+                    android:id="@+id/cityDescrNamText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_marginLeft="10dp"
+               />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/innerCountryDescrLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/innerCityDescrLayout">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/country_name_title"/>
+
+                <TextView
+                    android:id="@+id/countryDescrNameText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:layout_marginLeft="10dp"/>
+            </LinearLayout>
+
+
+
+        </RelativeLayout>
+
+
+
+
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/selectionTabs"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_below="@id/locDescrLayout">
+
         <Button
             android:id="@+id/day5btn"
             android:layout_width="0dp"
-            android:layout_weight=".33"
             android:layout_height="match_parent"
+            android:layout_weight=".33"
             android:background="@color/blue"
-            android:text="5 днів"
-            />
+            android:text="@string/day5btn_text" />
+
+
+
         <Button
             android:id="@+id/day10btn"
             android:layout_width="0dp"
-            android:layout_weight=".33"
             android:layout_height="match_parent"
+            android:layout_weight=".33"
             android:background="@color/blue"
-            android:text="10 днів"
-            />
+            android:text="@string/day10btn_text" />
+
         <Button
             android:id="@+id/day15btn"
             android:layout_width="0dp"
-            android:layout_weight=".33"
             android:layout_height="match_parent"
+            android:layout_weight=".33"
             android:background="@color/blue"
-            android:text="15 днів"
-            />
+            android:text="@string/day15btn_text" />
     </LinearLayout>
 
     <ListView
         android:id="@+id/listview_forecast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scrollbarStyle="insideOverlay"
         android:layout_below="@id/selectionTabs"
-        >
-    </ListView>
+        android:scrollbarStyle="insideOverlay"></ListView>
 
 </RelativeLayout>

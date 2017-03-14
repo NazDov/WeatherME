@@ -5,4 +5,8 @@
     <dimen name="loading_page_text_size">95sp</dimen>
 
     <dimen name="wdescr_width">100dp</dimen>
+
+    <dimen name="loc_descr_image_width">250dp</dimen>
+    <dimen name="loc_descr_image_height">250dp</dimen>
+    <dimen name="loc_desc_image_padding">10dp</dimen>
 </resources>

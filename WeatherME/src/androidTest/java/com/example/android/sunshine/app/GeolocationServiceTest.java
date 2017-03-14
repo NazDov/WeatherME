@@ -1,6 +1,6 @@
 package com.example.android.sunshine.app;
 
-import com.example.android.sunshine.app.service.GeoLocationService;
+import com.example.android.sunshine.app.service.WGeoLocationService;
 import com.example.android.sunshine.app.beans.Location;
 
 import junit.framework.TestCase;
@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
 public class GeolocationServiceTest extends TestCase {
 
 
-    private GeoLocationService successGeolocationService = new GeoLocationService() {
+    private WGeoLocationService successGeolocationServiceW = new WGeoLocationService() {
 
         @Override
         protected String getGeoLocation(String ipAddress) {
@@ -34,7 +34,7 @@ public class GeolocationServiceTest extends TestCase {
 
     };
 
-    private GeoLocationService errorGeolocationService = new GeoLocationService() {
+    private WGeoLocationService errorGeolocationServiceW = new WGeoLocationService() {
 
         @Override
         protected String getGeoLocation(String ipAddress) {
@@ -56,7 +56,7 @@ public class GeolocationServiceTest extends TestCase {
 
     public void testGetLocationReturnException() {
         try {
-            errorGeolocationService.getGeoLocation();
+            errorGeolocationServiceW.getGeoLocation();
         } catch (RuntimeException e) {
             assertTrue(true);
             return;
@@ -66,7 +66,7 @@ public class GeolocationServiceTest extends TestCase {
     }
 
     public void testGetLocation() throws UnknownHostException {
-        Location location = successGeolocationService.getGeoLocation();
+        Location location = successGeolocationServiceW.getGeoLocation();
         assertEquals("Lviv", location.getCity());
     }
 

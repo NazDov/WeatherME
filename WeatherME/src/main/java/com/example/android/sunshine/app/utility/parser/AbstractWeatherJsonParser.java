@@ -1,11 +1,11 @@
 package com.example.android.sunshine.app.utility.parser;
 
-import static com.example.android.sunshine.app.utility.ApplicationContext.*;
+import static com.example.android.sunshine.app.utility.WApplicationContext.*;
 
 import android.content.Context;
 
 import com.example.android.sunshine.app.R;
-import com.example.android.sunshine.app.utility.ApplicationContext;
+import com.example.android.sunshine.app.utility.WApplicationContext;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,7 +40,7 @@ public abstract class AbstractWeatherJsonParser<T> {
 
     protected String getWeatherDescriptionByConditionId(int wCondId) {
         if (context == null) {
-            context = ApplicationContext.getContext();
+            context = WApplicationContext.getContext();
             if (context == null) throw new RuntimeException("undefined application context");
         }
         String wDescr = null;

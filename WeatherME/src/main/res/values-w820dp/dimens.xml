@@ -5,4 +5,8 @@
     <dimen name="activity_horizontal_margin">64dp</dimen>
     <dimen name="loading_page_text_size">85sp</dimen>
     <dimen name="wdescr_width">150dp</dimen>
+
+    <dimen name="loc_descr_image_width">200dp</dimen>
+    <dimen name="loc_descr_image_height">200dp</dimen>
+    <dimen name="loc_desc_image_padding">10dp</dimen>
 </resources>
