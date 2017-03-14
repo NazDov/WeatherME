@@ -1,16 +1,17 @@
 [![API](https://img.shields.io/badge/API-10%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=10)
 
 <h2>WeatherME</h2>
+<b>Current Version:</b><b>1.0-alpha</b>
 <br>
 =========================
 <br>
-<b>Current Version:</b></b>1.0-alpha</b>
-<h4>Whats new in version </h4>
+<h4>Whats new in version: <i>1.0-alpha</i></h4>
 <ol>
   <li>get weather by days (5, 10, 15)</li>
   <li>automatically fetch weather by current geo location</li>
   <li>better daily weather description and UI</li>
   <li>fixed sudden app crushes during server errors</li>
+  <li>added localization and language settings</li>
 <ol>
 <br>
 =========================
