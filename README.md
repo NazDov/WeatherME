@@ -1,17 +1,28 @@
-[![API](https://img.shields.io/badge/API-9%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=10)
-[![Current Version](1.0-alpha)]()
+[![API](https://img.shields.io/badge/API-10%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=10)
 
-
-<img src="https://raw.githubusercontent.com/NazDov/WeatherME/samples/screenshot.png" >
-
-WeatherME
+<h2>WeatherME</h2>
+<b>Current Version:</b><b>1.0-alpha</b>
+<br>
 =========================
+<br>
+<h4>Whats new in version: <i>1.0-alpha</i></h4>
+<ol>
+  <li>get weather by days (5, 10, 15)</li>
+  <li>automatically fetch weather by current geo location</li>
+  <li>better daily weather description and UI</li>
+  <li>fixed sudden app crushes during server errors</li>
+  <li>added localization and language settings</li>
+<ol>
+<br>
+=========================
+<br>
+<img src="https://raw.githubusercontent.com/NazDov/WeatherME/master/samples/screenshot.png" width="300" >
 
 Try out my sample application on .
 
-<a href="http://s000.tinyupload.com/download.php?file_id=22153366913794932319&t=2215336691379493231906967">
-  <img alt="BetterPickers Samples on Google Play"
-         src="http://diylogodesigns.com/blog/wp-content/uploads/2016/06/blue-color-free-Download-Button.png" width="140" />
+<a href="http://s000.tinyupload.com/download.php?file_id=22153366913794932319&t=2215336691379493231938084">
+  <img alt="download"
+         src="http://diylogodesigns.com/blog/wp-content/uploads/2016/06/blue-color-free-Download-Button.png" width="250" />
 </a>
 
 
