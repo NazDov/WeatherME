@@ -1,7 +1,9 @@
 [![API](https://img.shields.io/badge/API-10%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=10)
 
 <h2>WeatherME</h2>
+<br>
 =========================
+<br>
 <b>Current Version:</b></b>1.0-alpha</b>
 <h4>Whats new in version </h4>
 <ol>
@@ -10,7 +12,9 @@
   <li>better daily weather description and UI</li>
   <li>fixed sudden app crushes during server errors</li>
 <ol>
-
+<br>
+=========================
+<br>
 <img src="https://raw.githubusercontent.com/NazDov/WeatherME/master/samples/screenshot.png" width="300" >
 
 Try out my sample application on .
